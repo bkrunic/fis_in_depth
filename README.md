@@ -15,6 +15,7 @@ We can use --all ( '--' before all are very important since that’s how FIS rec
 
 For dates, we're using --from followed by --to to set a date range.
 We can use common dates like 'yesterday', 'tomorrow' or 'today'. Or even insert the specific date in the ISO date format.
+
 For testing I'm usually using something like this: 
 node scriptName.js --all --from yesterday --to today
 It captures all available streams from yesterday to tomorrow.
