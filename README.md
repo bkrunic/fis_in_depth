@@ -10,6 +10,7 @@ So we're using it by calling:
 node scriptName.js [options] [streams_to_include]
 
 For options, there are few choices
+
 We can use --all ( '--' before all are very important since that’s how FIS recognizes the specific command) which captures all available streams. 
 
 For dates, we're using --from followed by --to to set a date range.
