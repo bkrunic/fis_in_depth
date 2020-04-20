@@ -55,5 +55,49 @@ const dateRange = input.dateRange; // to get chosen date range in Luxon's DateTi
 const from = dateRange.from;
 const to = dateRange.to;
 ```
+Example of scraper which is using FIS:
+```javascript 
+const { fis } = require('@incom/data-entry-js-sdk');
 
+const streams = {
+  streamA: [0, 'streamid_1'],
+  streamB: [1, 'streamid_2'],
+  streamC: [2, 'streamid_3'],
+  streamD: [3, 'streamid_4'],
+};
+
+(async () => {
+  const input = fis(Object.keys(streams), {
+    defaultFrom: 'today',
+    defaultTo: 'tomorrow',
+    defaultTz: 'UTC',
+    onlyOne: false,
+  });
+  const from = input.dateRange.from.toFormat("yyyy-MM-dd'T'HHmmss");
+  const to = input.dateRange.to.toFormat("yyyy-MM-dd'T'HHmmss");
+  
+  const sourceData = await requestATCData(parseUrl(from, to, 'CZ'));
+
+  const insertions = 
+        Object.entries(streams)
+          .filter(([k]) => input.streams.includes(k)) // here we go through all chosen streams
+          .map(async ([k, i]) => {
+            const idx = i[0];
+            const streamId = i[1];
+            
+            const dWithNulls = sourceData.map((x) => ({ date: parseDate(x.DF, x.TF), value: getValue(x, idx) }));
+
+            const d = dWithNulls.filter((x) => x.value !== null);
+            if (d.length === 0) {
+              logger.info('Empty data set for stream %s, streamId %s', k, streamId);
+              return Promise.resolve();
+            }
+
+            return constructAndSubmitRecord(streamId, 'ts1', d);
+          })
+          .map((i) => i.catch((e) => logger.error(e.message)));
+
+  await Promise.all(insertions);
+})();
+```
 
