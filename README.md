@@ -3,7 +3,7 @@ In depth explanation of the input system
 
 FIS (aka Fancy Input System) is using this CLI app helper called 'meow' (https://www.npmjs.com/package/meow).
 
-We’re mainly using FIS when we want to include specific streams or dates as input in our scrapers.And it makes choosing specific streams very easy.
+We’re mainly using FIS when we want to include specific streams or dates as input in our scrapers. And it makes choosing specific streams very easy.
 
 Usage:
 So we're using it by calling:
@@ -55,7 +55,7 @@ const dateRange = input.dateRange; // to get chosen date range in Luxon's DateTi
 const from = dateRange.from;
 const to = dateRange.to;
 ```
-Example of scraper which is using FIS:
+And the most important, an example of scraper which is using FIS:
 ```javascript 
 const { fis } = require('@incom/data-entry-js-sdk');
 
